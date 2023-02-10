@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -16,12 +17,16 @@ var audioCmd = &cobra.Command{
 			fmt.Printf("error retrieving filename: %s\n", err.Error())
 			return err
 		}
+		if filename == "" {
+			return errors.New("missing filename")
+		}
 		fmt.Println("uploading audio file, ", filename)
 		return nil
 	},
 }
 
 func init() {
+	audioCmd.Flags().StringP("filename", "f", "", "audio file")
 	uploadCmd.AddCommand(audioCmd)
 }
 
